@@ -37,6 +37,11 @@ public class KautotuKud implements Initializable {
         System.out.println(txtErabiltzaile.getText() + ":" + txtPasahitza.getText());
         System.out.println(comboZerbitzua.getValue());
 
+        if(!comboZerbitzua.getItems().contains(comboZerbitzua.getValue())){
+            ZerbitzuKud.getInstance().gehitu(comboZerbitzua.getValue().toString());
+            eguneratu();
+
+        }
         if ("Flickr".equals(comboZerbitzua.getValue()) &&
                 "juanan".equals(txtErabiltzaile.getText()) &&
                 "pereira".equals(txtPasahitza.getText())) {
@@ -44,13 +49,24 @@ public class KautotuKud implements Initializable {
             mainApp.mainErakutsi();
         }
     }
+    @FXML
+    void onClickEzabatu(ActionEvent event) {
+        ZerbitzuKud.getInstance().ezabatu(comboZerbitzua.getValue().toString());
+        eguneratu();
 
+    }
+    public void eguneratu(){
+        comboZerbitzua.getItems().clear();
+        List<String> zerbitzuakList = ZerbitzuKud.getInstance().lortuZerbitzuak();
+        ObservableList<String> zerbitzuak = FXCollections.observableArrayList(zerbitzuakList);
+        comboZerbitzua.setItems( zerbitzuak );
+    }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        List<String> herrialdeakList = ZerbitzuKud.getInstance().lortuZerbitzuak();
-        ObservableList<String> herrialdeak = FXCollections.observableArrayList(herrialdeakList);
-
-        comboZerbitzua.setItems( herrialdeak );
+        List<String> zerbitzuakList = ZerbitzuKud.getInstance().lortuZerbitzuak();
+        ObservableList<String> zerbitzuak = FXCollections.observableArrayList(zerbitzuakList);
+        comboZerbitzua.setItems( zerbitzuak );
+        comboZerbitzua.setEditable(true);
 
     }
 
